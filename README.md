@@ -31,9 +31,113 @@ The smart contract is deployed on the Ethereum blockchain and handles ETH deposi
 ## Project Structure
 
 ### Frontend (React)
+```javascript
+import {useState, useEffect} from "react";
+import {ethers} from "ethers";
+import atm_abi from "../artifacts/contracts/Assessment.sol/Assessment.json";
+
+export default function HomePage() {
+  const [ethWallet, setEthWallet] = useState(undefined);
+  const [account, setAccount] = useState(undefined);
+  const [atm, setATM] = useState(undefined);
+  const [balance, setBalance] = useState(undefined);
+  const [customDepositAmount, setCustomDepositAmount] = useState("");
+  const [customWithdrawAmount, setCustomWithdrawAmount] = useState("");
+
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const atmABI = atm_abi.abi;
+
+  const getWallet = async() => {
+  }
+
+  const handleAccount = (account) => {
+  }
+
+  const connectAccount = async() => {
+    }
+
+  const getATMContract = () => {
+  }
+
+  const getBalance = async() => {
+  }
+
+  const deposit = async(amount) => {
+  }
+
+  const withdraw = async(amount) => {
+  }
+
+  const initUser = () => {
+    }
+
+    return (
+      <div>
+        <p>Account Number: {account}</p>
+        <p>Account Balance (ETH): {balance}</p>
+        <div className="button-container">
+          <div className="column">
+            <h2>Deposit</h2>
+          </div>
+          <div className="column">
+            <h2>Withdraw</h2>
+          </div>
+        </div>
+        <style jsx>{`
+        `}
+        </style>
+      </div>
+    )
+  }
+
+  useEffect(() => {getWallet();}, []);
+
+  return (
+    <main className="container">
+      <div className="header-bar">
+        <header><h1>Welcome to Christian's ATM!</h1></header>
+      </div>
+      {initUser()}
+      <style jsx global>{`
+      `}
+      </style>
+    </main>
+  );
+}
+
+```
 
 
 ### Smart Contract (Solidity)
+
+```javascript
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.9;
+
+contract Assessment {
+    address public owner;
+    uint256 public balance;
+
+    event Deposit(address indexed sender, uint256 amount);
+    event Withdraw(address indexed sender, uint256 amount);
+
+    modifier onlyOwner() {
+    }
+
+    constructor(uint256 initBalance) payable {
+    }
+
+    function deposit(uint256 _amount) external payable onlyOwner {
+    }
+
+    function withdraw(uint256 _withdrawAmount) external onlyOwner {
+    }
+
+    function getBalance() external view returns (uint256) {
+    }
+}
+
+```
 
 ## Getting Started
 
