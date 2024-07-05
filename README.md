@@ -123,10 +123,10 @@ contract Assessment {
    - Clone the repository in GitPod or VSCode and navigate to the frontend directory.
    - Install dependencies: `npm i` in the Task1 Bash.
    - Add two new terminals
-   - Input 'npx hardhat node' in the first newly created terminal
-   - Input 'npx hardhat run --network localhost scripts/deploy.js' in the second newly created terminal
+   - Input `npx hardhat node` in the first newly created terminal
+   - Input `npx hardhat run --network localhost scripts/deploy.js` in the second newly created terminal
    - Start the development server by typing `npm run dev` in the Task1 Bash.
-   - Lastly, open http://localhost:3000 in your browser.
+   - Lastly, open `http://localhost:3000` in your browser.
 ## Authors
 Christian Benjamin ([@_cbso](https://x.com/cbso_)) - Metacrafter Student
 ## License
