@@ -1,39 +1,48 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract Assessment {
-    address public owner;
-    uint256 public balance;
+contract Betting {
+    address payable public owner;
+    uint256 public prizeAmount;
 
-    event Deposit(address indexed sender, uint256 amount);
-    event Withdraw(address indexed sender, uint256 amount);
+    event Add(uint256 amount);
+    event BetResult(address indexed player, bool won, uint guess, uint winningNumber);
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "You are not the owner");
-        _;
+    constructor(uint256 _prizeAmount) payable {
+        owner = payable(msg.sender);
+        prizeAmount = _prizeAmount;
     }
 
-    constructor(uint256 initBalance) payable {
-        owner = msg.sender;
-        balance = initBalance;
+    function add() public payable {
+        emit Add(msg.value);
     }
 
-    function deposit(uint256 _amount) external payable onlyOwner {
-        balance += _amount;
-        emit Deposit(msg.sender, _amount);
+    function bet(uint guess, uint256 betAmount) public payable {
+        require(guess >= 1 && guess <= 10, "Guess must be between 1 and 10");
+        require(msg.value == betAmount, "Bet amount must be equal to the sent value");
+
+        uint winningNumber = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 10 + 1;
+
+        if (guess == winningNumber) {
+            (bool sent, ) = msg.sender.call{value: betAmount * 2}("");
+            require(sent, "Failed to send Ether");
+            emit BetResult(msg.sender, true, guess, winningNumber);
+        } else {
+            emit BetResult(msg.sender, false, guess, winningNumber);
+        }
     }
 
-    // custom error
-    // error InsufficientBalance(uint256 balance, uint256 withdrawAmount);
+    function clear(uint amount) public {
+        require(msg.sender == owner, "You are not the owner of this contract");
+        require(address(this).balance >= amount, "Insufficient balance in contract");
 
-    function withdraw(uint256 _withdrawAmount) external onlyOwner {
-        require(balance >= _withdrawAmount, "Insufficient balance");
-        balance -= _withdrawAmount;
-        payable(msg.sender).transfer(_withdrawAmount);
-        emit Withdraw(msg.sender, _withdrawAmount);
+        (bool sent, ) = owner.call{value: amount}("");
+        require(sent, "Failed to send Ether");
     }
 
-    function getBalance() external view returns (uint256) {
-        return balance;
+    receive() external payable {}
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 }
